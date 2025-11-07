@@ -1,10 +1,41 @@
 const con = require('../../config/dbconfig')
 const { queryAction } = require('../../helpers/queryAction')
 
-const actorDao = {
-    table: 'actor',
+const directorDao = {
+    table: 'director',
 
-    findActorMovies: (res, table, id)=> {
+    search: (req, res, table)=> {
+
+        let sql = ''
+
+        const query = req.query ? req.query : {}
+
+        let first_name = req.query.first_name || null
+        let last_name = req.query.last_name || null
+
+        if (first_name == null && last_name == null) {
+            sql = `SELECT * FROM ${table};`
+        } else if (last_name == null) {
+            sql = `SELECT * FROM ${table} WHERE first_name LIKE '%${first_name}%';`
+        } else if (first_name == null) {
+            sql = `SELECT * FROM ${table} WHERE last_name LIKE '%${last_name}%';`
+        } else {
+            sql = `SELECT * FROM ${table} WHERE first_name LIKE '%${first_name}%' AND last_name LIKE '%${last_name}%';`
+        }
+
+        con.execute(
+            sql, 
+            (error, rows)=> {
+                if (rows.length == 0) {
+                    res.send('<h1>No data to send</h1>')
+                } else {
+                    queryAction(res, error, rows, table)
+                }
+            }
+        )
+    },
+
+    findDirectorMovies: (res, table, id)=> {
         // store movies from a director into an array and send with response
         const movies = []
 
@@ -39,38 +70,7 @@ const actorDao = {
                 }
             }
         )
-    },
-
-    search: (req, res, table)=> {
-
-        let sql = ''
-
-        const query = req.query ? req.query : {}
-
-        let first_name = req.query.first_name || null
-        let last_name = req.query.last_name || null
-
-        if (first_name == null && last_name == null) {
-            sql = `SELECT * FROM ${table};`
-        } else if (last_name == null) {
-            sql = `SELECT * FROM ${table} WHERE first_name LIKE '%${first_name}%';`
-        } else if (first_name == null) {
-            sql = `SELECT * FROM ${table} WHERE last_name LIKE '%${last_name}%';`
-        } else {
-            sql = `SELECT * FROM ${table} WHERE first_name LIKE '%${first_name}%' AND last_name LIKE '%${last_name}%';`
-        }
-
-        con.execute(
-            sql, 
-            (error, rows)=> {
-                if (rows.length == 0) {
-                    res.send('<h1>No data to send</h1>')
-                } else {
-                    queryAction(res, error, rows, table)
-                }
-            }
-        )
     }
 }
 
-module.exports = actorDao
+module.exports = directorDao
