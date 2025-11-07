@@ -49,7 +49,7 @@ const directorDao = {
                         movies.push(obj)
                     })
                     con.execute(
-                        `SELECT * FROM ${table} WHERE ${table}_id = ${id};`,
+                        `SELECT first_name as first, last_name as last FROM ${table} WHERE ${table}_id = ${id};`,
                         (error, rows)=> {
                             rows.forEach(row => {
                                 row.movies = movies

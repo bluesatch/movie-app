@@ -5,7 +5,7 @@ const actorDao = {
     table: 'actor',
 
     findActorMovies: (res, table, id)=> {
-        // store movies from a director into an array and send with response
+        // store movies from a actor into an array and send with response
         const movies = []
 
         let sql = `SELECT * FROM movie m JOIN movie_to_${table} USING (movie_id) JOIN ${table} USING (${table}_id) WHERE ${table}_id = ${id};`
@@ -18,7 +18,7 @@ const actorDao = {
                         movies.push(obj)
                     })
                     con.execute(
-                        `SELECT * FROM ${table} WHERE ${table}_id = ${id};`,
+                        `SELECT first_name as first, last_name as last FROM ${table} WHERE ${table}_id = ${id};`,
                         (error, rows)=> {
                             rows.forEach(row => {
                                 row.movies = movies
