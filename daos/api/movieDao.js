@@ -15,17 +15,13 @@ const movieDao = {
         if (genre == null && rating == null) {
             sql = `SELECT * FROM ${table};`
         } else if (rating == null) {
-            sql = `SELECT m.movie_id, m.title, m.rating, m.runtime, m.nationality, m.yr_released, m.budget, m.gross, m.production_id, m.showing, m.poster, g.genre_id, g.genre 
+            sql = `SELECT m.*, g.genre_id, g.genre 
                 FROM movie m 
                 JOIN movie_to_genre USING (movie_id) 
                 JOIN genre g USING (genre_id) 
                 WHERE g.genre = '${genre}';`
         } else if (genre == null ) {
-            sql = `SELECT m.movie_id, m.title, m.rating, m.runtime, m.nationality, m.yr_released, m.budget, m.gross, m.production_id, m.showing, m.poster, g.genre_id, g.genre 
-                FROM movie m 
-                JOIN movie_to_genre USING (movie_id) 
-                JOIN genre g USING (genre_id) 
-                WHERE m.rating = '${rating}';`
+            sql = `SELECT * FROM movie WHERE rating = '${rating}';`
         } else {
             sql = `SELECT m.movie_id, m.title, m.rating, m.runtime, m.nationality, m.yr_released, m.budget, m.gross, m.production_id, m.showing, m.poster, g.genre_id, g.genre 
                 FROM movie m 

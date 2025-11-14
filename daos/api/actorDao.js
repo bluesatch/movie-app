@@ -47,8 +47,13 @@ const actorDao = {
 
         const query = req.query ? req.query : {}
 
-        let first_name = req.query.first_name || null
-        let last_name = req.query.last_name || null
+        /**
+         * Ex.
+         * query = { first_name: ro, last_name: di }
+         */
+
+        let first_name = query.first_name || null
+        let last_name = query.last_name || null
 
         if (first_name == null && last_name == null) {
             sql = `SELECT * FROM ${table};`

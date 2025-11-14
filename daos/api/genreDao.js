@@ -13,6 +13,7 @@ const genreDao = {
         let sql = ''
 
         if (genre != null) {
+            // select all from one table and certain fields from another => stackoverflow
             sql = `SELECT movie.*, g.genre FROM movie JOIN movie_to_genre USING (movie_id) JOIN genre g USING (genre_id) WHERE g.genre = '${genre}';`
         } else {
             sql = `SELECT * FROM movie;`
